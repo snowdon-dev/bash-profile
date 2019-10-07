@@ -1,0 +1,10 @@
+#!/bin/bash
+
+HASH=`docker images -q`
+
+if [[ -z "$HASH" ]]; then
+  echo 'No images';
+  return 0;
+fi;
+
+echo "$HASH" | xargs docker rmi

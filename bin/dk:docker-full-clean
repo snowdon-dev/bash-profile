@@ -1,0 +1,5 @@
+#!/bin/bash
+
+dk:docker-clean-active && \
+dk:docker-clean-dead && \
+dk:docker-clean-images

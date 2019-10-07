@@ -1,0 +1,112 @@
+#!/bin/bash
+#   ————————————————————————————————————————————————————
+#
+#   System
+#   
+#   @author       dale@snowdon.dev
+#   ————————————————————————————————————————————————————
+
+
+#   See the outout of given path in less. 
+see() {
+  command cat $1 | command less
+}
+
+#   Print the name of the computer. 
+
+name() {
+  scutil --get ComputerName
+}
+
+#   ii:  display useful host related informaton
+ii() {
+  echo -e "\nYou are logged on ${RED}$HOST"
+  echo -e "\nAdditionnal information:$NC " ; uname -a
+  echo -e "\n${RED}Users logged on:$NC " ; w -h
+  echo -e "\n${RED}Current date :$NC " ; date
+  echo -e "\n${RED}Machine stats :$NC " ; uptime
+  echo -e "\n${RED}Current network location :$NC " ; scselect
+  #echo -e "\n${RED}Public facing IP Address :$NC " ;myip
+  #echo -e "\n${RED}DNS Configuration:$NC " ; scutil --dns
+	echo
+}
+
+#   ————————————————————————————————————————————————————
+#   Screen helper commands 
+#   ————————————————————————————————————————————————————
+
+
+#   ————————————————
+#   List the names of the any current screens. 
+# 
+screen-detatch() {
+  screen -ls | awk '{print $1}' | tail -n +2 | sed '$ d'
+}
+
+
+#   mans:   Search manpage given in agument '1' for term given in argument '2'
+#           (case insensitive) displays paginated result with colored search
+#           terms and two lines surrounding each hit.
+# Example: mans mplayer codec
+mans () {
+	man $1 | grep -iC2 --color=always $2 | less
+}
+
+#   ————————————————————————————————————————————————————
+#   FILE AND FOLDER MANAGEMENT
+#   ————————————————————————————————————————————————————
+
+# ql:           Opens any file in MacOS Quicklook Preview
+look () { qlmanage -p "$*" >& /dev/null; }
+
+
+# zipf:         To create a ZIP archive of a folder
+zipf () { zip -r "$1".zip "$1" ; }  
+
+# numFiles:     Count of non-hidden files in current dir
+alias numFiles='echo $(ls -1 | wc -l)'     
+
+# make n md of file
+alias make1mb='mkfile 1m ./1MB.dat'        
+alias make5mb='mkfile 5m ./5MB.dat'
+alias make10mb='mkfile 10m ./10MB.dat'
+
+# qfind:    Quickly search for file
+alias qfind="find . -name "           
+
+# Find file under the current directory
+ff () { /usr/bin/find . -name "$@" ; }
+
+# Find file whose name starts with a given string
+ffs () { /usr/bin/find . -name "$@"'*' ; }
+
+# Find file whose name ends with a given string
+ffe () { /usr/bin/find . -name '*'"$@" ; } 
+
+#   ————————————————
+#   Alias for the command ll | grep find.
+dirf() { /usr/bin/ls -lah | grep $1 | less ; }
+
+#   ————————————————
+#   Find file name, useful for dirfin language.oop5.magic.html | pbcopy
+#   ie. searching for file names in directories.
+dirfn () { ll | grep $@ | awk '{print $9}' ; }
+
+#   cleanupDS:  Recursively delete .DS_Store files
+alias cleanupDS="find . -type f -name '*.DS_Store' -ls -delete"
+
+#   finderShowHidden:   Show hidden files in Finder
+#   finderHideHidden:   Hide hidden files in Finder
+alias finderShowHidden='defaults write com.apple.finder ShowAllFiles TRUE'
+alias finderHideHidden='defaults write com.apple.finder ShowAllFiles FALSE'
+
+
+#   ————————————————————————————————————————————————————
+#   Sleeping
+#   ————————————————————————————————————————————————————
+alias hibernate='sudo pmset -a hibernatemode 25'
+alias sleeplow='sudo pmset -a hibernatemode 0'
+alias safesleep='sudo pmset -a hibernatemode 3'
+alias smartsleep='sudo pmset -a hibernatemode 2'
+alias s='pmset sleepnow';
+alias sleep='pmset sleepnow'

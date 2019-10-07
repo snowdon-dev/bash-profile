@@ -1,0 +1,50 @@
+#!/bin/bash
+#   ————————————————————————————————————————————————————
+#
+#   Handy common network stuff.
+#
+#   @author       dale@snowdon.dev
+#   ————————————————————————————————————————————————————
+
+
+#   ————————————————
+#   Connect to a local pi
+#
+pi() 
+{
+  num="$1"
+  shift
+  ssh pi@"pi$num.local" $@
+}
+
+#   ————————————————
+#   Ping all devices on home network address range.
+#
+broadcast-ping()
+{
+  ping 192.168.8.255
+}
+
+#   ————————————————
+#   Refresh and list known network addresses.
+#
+network-list()
+{
+  echo 'Sending broadcast ping - 40 attempts'
+  ping 192.168.8.255 -c 40 > /dev/null 2>&1
+  echo 'Printing list'
+  arp -a
+}
+
+#   ————————————————
+#   Get a network address by mac address.
+#
+#   ```
+#     grab-mac B8:27:EB:82:FC:41
+#   ```
+#   @param $1  String  mac address
+#
+grab-mac()
+{
+  arp -a | grep $1 | awk '{print $1}'
+}

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+HASH=`docker ps -aq`;
+
+if [[ -z "$HASH" ]]; then
+  echo "No dead containers";
+  return 0;
+fi;
+
+echo "$HASH" | xargs -n 1 docker rm

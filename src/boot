@@ -1,0 +1,45 @@
+#!/bin/bash
+#   ————————————————————————————————————————————————————
+#
+#   Boot external dependencies and ensure that required
+#  
+#   @author       dale@snowdon.dev
+#   ————————————————————————————————————————————————————
+
+# add bin scripts to PATH
+PATH=$PATH:$BP_CODE_SOURCE/bin
+
+#   ————————————————
+#   Test if the bat command is installed 
+# 
+if [ ! "`type bat`" = "bat is /usr/local/bin/bat" ]; then
+  echo 'Please install bat: brew install bat';
+fi;
+
+#   ————————————————
+#   Test if the tree command is installed 
+# 
+if [ ! "`type tree`" = "tree is /usr/local/bin/tree" ]; then
+  echo 'Please install tree: brew install tree';
+fi;
+
+#   ————————————————
+#   Test if the aescrypt command is installed 
+# 
+if [ ! "`type aescrypt`" = "aescrypt is $BP_CODE_SOURCE/bin/aescrypt" ]; then
+    echo "Please install aescrypt";
+fi;
+
+#   ————————————————
+#   Test if the rename command is installed 
+# 
+if [ ! "`type rename`" = "rename is /usr/local/bin/rename" ]; then
+    echo "Please install rename: brew install rename";
+fi;
+
+#   ————————————————
+#   Test if the trash command is installed 
+# 
+if [ ! "`type trash`" = "trash is /usr/local/bin/trash" ]; then
+    echo "Please install rename: brew install trash";
+fi;

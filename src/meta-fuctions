@@ -1,0 +1,85 @@
+#!/bin/bash
+#   ————————————————————————————————————————————————————
+#
+#   Meta Functions
+#
+#   Functions relating to this bash profile repository.
+#
+#   @author       dale@snowdon.dev
+#   ————————————————————————————————————————————————————
+
+REPO_FOLDER="$BP_CODE_SOURCE"
+
+
+alias repos="cd $BP_REPO_SOURCE"
+
+#   ————————————————
+#   Cd in the bash-profile directory.
+#
+cdprofile ()
+{
+    local dir="$BP_CODE_SOURCE"
+    l "$dir"
+}
+
+#   ————————————————
+#   Pass params to the default text editor.
+#
+edit ()
+{
+    eval $textEditor $@
+}
+
+#   ————————————————
+#   Open the profile in the default text editor.
+#
+profile ()
+{
+    local dir="$BP_CODE_SOURCE"
+    eval $textEditor $dir
+}
+
+#   ————————————————
+#   Reload the env source
+#
+reload ()
+{
+    local LOCATION=~/$mainRcLocation
+    . "$LOCATION"
+}
+
+
+#   ————————————————
+#   Updates the bash profile with the git repo
+function update
+{
+    local CWD=`pwd`
+    local dir=$BP_CODE_SOURCE
+    builtin cd "$dir"
+    command git fetch
+    command git pull origin
+    . "~/$BP_CODE_SOURCE"
+    builtin cd "$CWD"
+}
+
+
+#   ————————————————
+#   Pushes branch profile to repo
+function pushprofile
+{
+    local message=$1
+    if [[ -z "$message" ]]; then
+        echo "Please pass through a message"
+        return
+    else
+        shift
+    fi
+
+    CWD=`pwd`
+    local CWD=`pwd`
+    local dir=$BP_CODE_SOURCE
+    builtin cd "$dir"
+    command git commit -am "$message"
+    command git push origin;
+    builtin cd "$CWD"
+}

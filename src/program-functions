@@ -1,0 +1,36 @@
+#!/bin/bash
+#   ————————————————————————————————————————————————————
+#
+#   Handy Alias
+#
+#   @author       dale@snowdon.dev
+#   ————————————————————————————————————————————————————
+
+#   ————————————————
+#   Use nvim over vim given it is installed. 
+#
+vim () {
+  if hash nvim 2> /dev/null; then
+    local PROGRAM="nvim"
+  else
+    local PROGRAM="vim"
+  fi
+  eval command $PROGRAM $@
+}
+
+#   ————————————————————————————————————————————————————
+#   Development Program shortcut/implementation's
+#   ————————————————————————————————————————————————————
+
+alias handlesubl='open -a /Applications/Sublime\ Text.app/'
+alias handlecode='open -a /Applications/Visual\ Studio\ Code.app/'
+alias handlestorm='open -a /Applications/PhpStorm.app/'
+alias handlewebstorm='open -a /Applications/WebStorm.app/'
+alias handleatom='open -a /Applications/Atom.app/'
+
+
+code () { if [ -n "$1" ]; then handlecode $@; else handlecode ./ ; fi ; }
+phps () { if [ -n "$1" ]; then handlestorm $@; else handlestorm ./ ; fi ; }
+webs () { if [ -n "$1" ]; then handlewebstorm $@; else handlewebstorm ./ ; fi ; }
+subl () { if [ -n "$1" ]; then handlesubl $@; else handlesubl ./ ; fi ; }
+atom () { if [ -n "$1" ]; then handleatom $@; else handleatom ./ ; fi ; }

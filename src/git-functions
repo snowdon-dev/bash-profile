@@ -1,0 +1,338 @@
+#!/bin/bash
+#   ————————————————————————————————————————————————————
+#
+#   Git functions
+#
+#   @author       dale@snowdon.dev
+#   ————————————————————————————————————————————————————
+
+
+#   ————————————————
+#   Common git shortcuts
+#
+alias gco='git commit '
+alias gsave='git commit -am save'
+alias gr='git reset '
+alias grh='git reset --hard'
+alias gsa='git stash '
+alias gb='git branch '
+alias gch='git checkout '
+alias gd='git diff'
+alias gdm='git diff master'
+alias gstat='git status'
+alias gp='git push'
+alias gpb="git remote -v | awk '{ print \$1 }' | sort -u | xargs -I % sh -c 'git push %'"
+alias gm='merge '
+alias dmas='git diff master'
+alias dmaster='git diff master'
+alias mmerge='git merge master'
+alias gbl='git branch -vv'
+alias gap='git add -p'
+alias gdn='git diff master --name-only | cat'
+alias glogb='git log --oneline --decorate --graph --first-parent'
+alias glogbnm='git log --no-merges --oneline --decorate --graph --first-parent'
+
+
+#   ————————————————
+#   Git log prity.
+#
+alias glp="git_log_prity"
+git_log_prity()
+{
+  if [ -n $1 ]; then
+    local num="10"
+  else
+    local num=$1
+  fi
+
+  git log -n $num --oneline
+}
+
+
+#   ————————————————
+#   Rebase from masters merge base.
+#
+rebase()
+{
+  local CBRANCH=`gbc`
+  git rebase -i `git merge-base master $CBRANCH`
+}
+
+
+#   ————————————————
+#   Diff with the current branches base.
+#
+diff()
+{
+  local CBRANCH=`gbc`
+  local BASE=`git merge-base $CBRANCH master`
+  git diff $BASE $CBRANCH $@
+}
+
+#   ————————————————
+#   Diff with the current branches origin.
+#
+diffo()
+{
+  local CBRANCH=`gbc`
+  local BASE=`git merge-base origin/$CBRANCH $CBRANCH`
+  git diff $BASE $CBRANCH $@
+}
+
+#   ————————————————
+#   Get the current branch.
+#
+alias gbc="git branch | grep \* | cut -d ' ' -f2"
+
+
+
+#   ————————————————
+#   Copy the current branch into clipboard.
+#
+alias gbcc="gbc | pbcopy"
+
+
+
+#   ————————————————
+#   Lists the remote branches.
+#
+alias gbr='git ls-remote --heads'
+
+
+
+#   ————————————————
+#   Update the master branch.
+#
+alias gdate='gitupdate'
+function gitupdate
+{
+  # check that this folder is a git directory
+  git_dir="$(git rev-parse --show-toplevel 2> /dev/null)"
+  if [ -z "$git_dir" ]; then
+    echo "Not located in a git directory `pwd`"
+    return
+  fi
+
+  git fetch && git pull origin master
+}
+
+
+
+#   ————————————————
+#   Get the ticket number form current branch
+#
+function gtn
+{
+  local TICNUM=`gbc | sed -E 's/[a-z\/]*//g'`
+
+  if [ -z "$TICNUM" ]; then
+    echo 'Ticket number could not be found on the current branch'  1>&2
+    exit 1
+  fi;
+
+  echo "$TICNUM"
+}
+
+
+#   ————————————————
+#   Git create and checkout new branch
+#
+function gcb
+{
+  git checkout -b $1
+}
+
+#   ————————————————
+#   Git create a new branch and copy to clipboard
+#
+function gcbc
+{
+  git checkout -b $1 && gbcc
+  local branch_name=`gbcc`
+  echo "Copied the branch $branch_name into your clipboard"
+}
+
+#   ————————————————
+#   Git delete the branch
+#
+#   @param 1 - The name of the branch to delete
+#
+function gbd
+{
+  local delete_branch=$1
+  shift
+
+  # check in git dir
+  find_branch=`find ./ -name ".git" -maxdepth 1`
+  if [[ -z $find_branch ]]; then
+    echo "Warn: you are not in a git folder"
+    return
+  fi
+
+
+  # check not deleting master branch
+  local current_branch=`gbc`
+  if [[ $delete_branch = "master" ]] || [[ -z $delete_branch ]]; then
+    echo "Warn: You cannot delete the master branch, delete aborted"
+    return
+  fi
+
+  git branch -D $delete_branch $@
+}
+
+
+#   ————————————————
+#   Checkout the master branch
+#
+alias mas='master'
+function master
+{
+  # check in git dir
+  find_branch=`find ./ -name ".git" -maxdepth 1`
+  if [[ -z $find_branch ]]; then
+    echo "Warn: you are not in a git folder"
+    return
+  fi;
+
+  # Run command
+  git checkout master
+}
+
+
+#   ————————————————
+#   Push the branch as upsteam to remote git.
+#
+#   @param 1 - Name of remote repository
+#   @param 2 - (optional) Name of local branch
+#
+# @todo move the shits into a if statement
+function gpus
+{
+  local current_branch=`gbc`
+
+  # check not in master branch
+  if [[ $current_branch = "master" ]]; then
+    echo "Warn: your on branch master, push aborted"
+    return
+  fi
+
+  # given no branch name, use origin, warn the user
+  if [[ -z $remote_location ]]; then
+    echo "No remote was given, using origin"
+    local remote_location='origin'
+  else
+    local remote_location=$1
+    shift
+  fi
+
+  # given no branch name, use current, warn the user
+  if [[ -z $branch ]]; then
+    echo "No branch was given, using the current branch: $current_branch"
+    local branch=$current_branch
+  else
+     local branch=$1
+     shift
+   fi
+
+  git push --set-upstream $remote_location $branch
+} # end function gpu
+
+
+
+gbup()
+{
+  local current_branch=`gbc`
+
+  # check not in master branch
+  if [[ $current_branch = "master" ]]; then
+    echo "Warn: your on branch master, push aborted"
+    return
+  fi
+
+  # given no branch name, use origin, warn the user
+  if [[ -z $remote_location ]]; then
+    echo "No remote was given, using origin"
+    local remote_location='origin'
+  else
+    local remote_location=$1
+    shift
+  fi
+
+  # given no branch name, use current, warn the user
+  if [[ -z $branch ]]; then
+    echo "No branch was given, using the current branch: $current_branch"
+    local branch=$current_branch
+  else
+     local branch=$1
+     shift
+   fi
+
+
+  git branch --set-upstream-to=$remote_location $branch
+}
+
+
+#   ————————————————
+#   Checkout the develop branch
+#
+#  @param 1 - Should copy branch name to the clipboard
+alias dev='develop'
+function develop
+{
+  # create a basic folder name for the position develop/initals/[namespacehere]
+  if [[ -z $1 ]]; then
+    local namespace="staging"
+  else
+    local namespace=$1
+  fi
+
+
+  # create the full develop branch name
+  local branch_name=$developBranchName"/"$namespace
+
+
+  # check that this folder is a git directory
+   local git_dir="$(git rev-parse --show-toplevel 2> /dev/null)"
+   if [ -z "$git_dir" ]; then
+     echo "This file is not located in a git directory `pwd`"
+     return
+   fi
+    
+  local head_name="refs/heads/$branch_name"
+
+  # checkout and create branch if does not exist
+  git show-ref --verify --quiet "$head_name" && gch $branch_name ||  gcb $branch_name
+
+  # should copy branch name to clipboard
+  if [[ $1 = 'copy' || $1 = 'c' ]]; then
+    echo "Branch name copyied to clipboard"
+    echo $developBranchName | pbcopy
+  fi
+}
+
+#   ————————————————
+#   Removed the local development branch
+#
+#
+function devdel
+{
+  # create a basic folder name for the position develop/initals/[namespacehere]
+  if [[ -z $1 ]]; then
+    local namespace="staging"
+  else
+    local namespace=$1
+  fi
+
+  # create the fill develop branch name
+  local branch_name=$developBranchName"/"$namespace
+
+  # check that this folder is a git directory
+  git_dir="$(git rev-parse --show-toplevel 2> /dev/null)"
+  if [ -z "$git_dir" ]; then
+    echo "This file is not located in a git directory `pwd`"
+    return
+  fi
+
+  git branch -D $branch_name
+}
+

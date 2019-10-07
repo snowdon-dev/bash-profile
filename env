@@ -1,0 +1,35 @@
+#!/bin/bash
+#   ————————————————————————————————————————————————————
+#   @author       dale@snowdon.dev
+#   ————————————————————————————————————————————————————
+
+
+#   ————————————————
+#   Add coloring to the ouput of the tree command.
+#
+#   @see http://www.linux-sxs.org/housekeeping/lscolors.html
+#
+LS_COLORS='di=1:fi=0:ln=31:pi=5:so=5:bd=5:cd=5:or=31:mi=0:ex=35:*.rpm=90'
+export LS_COLORS
+
+
+#   ————————————————————————————————
+#   Start user editable commands.
+#   ————————————————————————————————
+
+#   ————————————————
+#   The default text editor command.
+#
+#   A number of these are defined in the profile-functions bash include,
+#   remember to install the program for the given command. IE using code
+#   requires having Microsoft Visual Studio installed on the host machine.
+#
+textEditor="vim"
+
+#   ————————————————
+#   Repositories Location
+#
+#   Location of the main git repositories store folder. Used as the storage
+#   of the users active repos.
+#
+developBranchName="develop/ds";

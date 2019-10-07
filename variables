@@ -1,0 +1,30 @@
+#!/bin/bash
+
+#   ———————————————
+#   Location of the main bash rc
+#
+#   using ps because $SHELL is set globaly, this needs to be the active shell
+CMD=`ps -p $$ | awk '{if (NR!=1) { print $4 } }'`;
+if ! echo $CMD | grep -Fxq "zsh" ; then
+  mainRcLocation=".zshrc"
+  mainProfileLocaiton=".zprofile"
+else
+  mainRcLocation=".bashrc"
+  mainProfileLocation=".bash_profile"
+fi
+unset CMD
+
+#   ————————————————
+#   Repositories Location
+#
+#   Location of the main git repositories store folder.
+reposFolder="Repositories"
+
+# location of the users home
+BP_BASH_SOURCE="$HOME"
+
+# location of the users bash profile repository
+BP_CODE_SOURCE="$BP_BASH_SOURCE/$reposFolder/bash-profile"
+
+# location of the users repository folder
+BP_REPO_SOURCE="$BP_BASH_SOURCE/$reposFolder"

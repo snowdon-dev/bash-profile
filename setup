@@ -1,0 +1,59 @@
+#!/bin/bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+# load variables into shell
+. -- "$DIR/variables"
+
+# create sym links for profile
+if [ "$SHELL" == "/bin/zsh" ]; then
+  # link profile
+  ln -sf "$BP_CODE_SOURCE/profile" "$BP_BASH_SOURCE/.zprofile"
+
+  # source rc given its not already
+  if ! grep -Fxq "source $BP_CODE_SOURCE/bootstrap" ~/.zshrc; then
+    echo "source $BP_CODE_SOURCE/bootstrap" >> ~/.zshrc
+  fi
+else 
+  ln -sf "$BP_CODE_SOURCE/profile" "$BP_BASH_SOURCE/.bash_profile"
+  ln -sf "$BP_CODE_SOURCE/bootstrap" "$BP_BASH_SOURCE/.bashrc"
+fi
+
+if hash nvim 2> /dev/null; then
+  NVIM_PATH="$BP_BASH_SOURCE/.config/nvim/init.vim"
+  command mkdir "$BP_BASH_SOURCE/.config/nvim/" 2> /dev/null
+  ln -sf "$BP_CODE_SOURCE/.vimrc" "$NVIM_PATH"
+else
+  ln -sf "$BP_CODE_SOURCE/.vimrc" "$BP_BASH_SOURCE/.vimrc"
+fi
+
+# setup bin permissions
+chmod -R 775 "$DIR/bin"
+
+if hash brew 2> /dev/null; then
+  # install all programs from brew given they don't already exist
+  if [ ! "`type trash`" = "trash is /usr/local/bin/trash" ]; then
+    brew install trash
+  fi
+
+  if [ ! "`type rename`" = "rename is /usr/local/bin/rename" ]; then
+    brew install rename
+  fi
+
+  if [ ! "`type bat`" = "bat is /usr/local/bin/bat" ]; then
+    brew install bat
+  fi
+
+  if [ ! "`type tree`" = "tree is /usr/local/bin/tree" ]; then
+    brew install tree
+  fi
+
+  # @todo nvim dependencies
+else
+  echo "Some commands may not work as dependencies haven't been installed.";
+fi
+
+
+
+# clean up
+unset DIR

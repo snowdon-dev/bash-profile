@@ -1,0 +1,191 @@
+#!/bin/bash
+#   ————————————————————————————————————————————————————
+#
+#   Handy Alias
+#
+#   @author       dale@snowdon.dev
+#   ————————————————————————————————————————————————————
+
+#   ————————————————
+#   Script Listing 
+#
+alias scripts="l $BP_CODE_SOURCE/bin"
+
+
+
+#   ————————————————
+#   Key generation
+#
+
+# generate a random pass
+alias randpass="openssl rand -base64 12"
+
+# Create psudo random 32 character key
+alias phpkey='php -r "echo md5(uniqid()).PHP_EOL;"'
+
+
+
+#    ————————————————————————————————————————————————————
+#    Prefered implementations
+#    ————————————————————————————————————————————————————
+
+#   ————————————————
+#   Common commands
+#
+
+alias rm='trash'
+alias c='clear'
+alias ll='ls -FGlAhp'
+alias cp='cp -iv'
+alias mv='mv -iv'
+alias mkdir='mkdir -pv'
+alias less='less -FS'
+
+
+# edit package.json in current directory
+alias package="vim ./package.json"
+
+
+#   ————————————————
+#   Directory Navigaton / Display
+#
+
+
+# List the current directory
+alias l='tree --dirsfirst -h -a -L 1'
+
+# Always list directory contents upon 'cd'
+#
+cd() { 
+  builtin cd "$@"
+  l # use tree over ls ..
+}
+
+#### Back and forth levels
+####
+alias cd..='cd ../'
+alias ..='cd ../'
+alias ...='cd ../../'
+alias .3='cd ../../../'
+alias .4='cd ../../../../'
+alias .5='cd ../../../../../'
+alias .6='cd ../../../../../../'
+
+
+alias pbc='pbcopy'
+alias pbp='pbpaste'
+
+
+#   ————————————————
+#   Replace new lines with a comma, for example when copying data
+#   from Excel.
+remlb () { pbp | tr '\n' ',' | pbc; }
+
+#   ————————————————
+#   Remove literal newline characters from top of clipboard stack.
+#
+remnl () { pbp | sed -E 's/(\\n|\\r)//g' | pbc; }
+
+#   ————————————————
+#   Replace literal characters from top of clipboard stack.
+#
+reml () { pbp | sed -E "s/$1/$2/g" | pbc; }
+
+#   ————————————————
+#   Run cat every 1 second to watch a file.
+#
+rewatch () { nice -n 19 watch -n 1 cat $1; }
+
+#   ————————————————
+#   Alias for watching a file tail.
+#
+apwatch () { nice -n 19 tail -f $1; }
+
+#   ————————————————
+#   Request a web resource and discard the response.
+#
+wreq () { curl $1 &>/dev/null; }
+
+#   ————————————————
+#   remove lines from a file.
+#
+#   @param 1 pattern to remove
+#   @param 2 file to replace on
+#
+rmline () { sed "/$1/ d" $2 > temp.file && rm $2 && mv temp.file $2; }
+
+
+#   ————————————————
+#   Handy directory shortcuts
+#
+
+
+# Full Recursive Directory Listing
+alias lr='ls -R | grep ":$" | sed -e '\''s/:$//'\'' -e '\''s/[^-][^\/]*\//--/g'\'' -e '\''s/^/   /'\'' -e '\''s/-/|/'\'' | less'
+
+# Open the current location in finder
+alias f='open -a Finder ./'
+
+
+#   ————————————————
+#   Common directory shortcuts
+#
+alias ~='cd ~/'
+alias desk='cd ~/Desktop/Desk'
+alias temp='cd ~/DesktopTemp'
+alias projects='cd ~/Desktop/Projects'
+alias personal='cd ~/Desktop/Personal'
+
+#   ————————————————————————————————————————————————————
+#   System
+#   ————————————————————————————————————————————————————
+
+#   ————————————————
+#   Simple PHP local server
+#
+alias handle_php_serve='php -S localhost:8000 -t '
+serve () { if [ -n "$1" ]; then handle_php_serve $@; else handle_php_serve ./; fi; }
+alias handle_python_serve='python SimpleHTTPServer 8080'
+servep () { if [ -n "$1" ]; then handle_python_serve $@; else handle_python_serve ./; fi; }
+
+
+# 'Cd's to frontmost window of MacOS Finder
+cdf () {
+    currFolderPath=$( /usr/bin/osascript <<EOT
+        tell application "Finder"
+            try
+        set currFolder to (folder of the front window as alias)
+            on error
+        set currFolder to (path to desktop folder as alias)
+            end try
+            POSIX path of currFolder
+        end tell
+EOT
+    )
+    echo "cd to \"$currFolderPath\""
+    cd "$currFolderPath"
+}
+
+
+# Extract most know archives with one command
+extract () {
+    if [ -f $1 ] ; then
+        case $1 in
+        *.tar.bz2)   tar xjf $1     ;;
+        *.tar.gz)    tar xzf $1     ;;
+        *.bz2)       bunzip2 $1     ;;
+        *.rar)       unrar e $1     ;;
+        *.gz)        gunzip $1      ;;
+        *.tar)       tar xf $1      ;;
+        *.tbz2)      tar xjf $1     ;;
+        *.tgz)       tar xzf $1     ;;
+        *.zip)       unzip $1       ;;
+        *.Z)         uncompress $1  ;;
+        *.7z)        7z x $1        ;;
+        *)     echo "'$1' cannot be extracted via extract()" ;;
+            esac
+        else
+            echo "'$1' is not a valid file"
+        fi
+}
+

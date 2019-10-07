@@ -1,0 +1,26 @@
+#!/bin/bash
+#   ————————————————————————————————————————————————————
+#
+#   Personal Commands 
+#
+#   @author       dale@snowdon.dev
+#   ————————————————————————————————————————————————————
+
+#   ————————————————
+#   Create a new journal file with the current timestamp.
+#
+journal()
+{
+  vim -n `date '+%A-%W-%Y-%X'.txt`
+}
+
+
+#   ————————————————
+#   List the password file.
+#
+pass() 
+{
+  aescrypt -d -o - ~/Desktop/Personal/.password.txt.aes 
+}
+
+
