@@ -19,14 +19,6 @@ else
   ln -sf "$BP_CODE_SOURCE/bootstrap" "$BP_BASH_SOURCE/.bashrc"
 fi
 
-if hash nvim 2> /dev/null; then
-  NVIM_PATH="$BP_BASH_SOURCE/.config/nvim/init.vim"
-  command mkdir "$BP_BASH_SOURCE/.config/nvim/" 2> /dev/null
-  ln -sf "$BP_CODE_SOURCE/.vimrc" "$NVIM_PATH"
-else
-  ln -sf "$BP_CODE_SOURCE/.vimrc" "$BP_BASH_SOURCE/.vimrc"
-fi
-
 # setup bin permissions
 chmod -R 775 "$DIR/bin"
 
@@ -47,12 +39,25 @@ if hash brew 2> /dev/null; then
   if [ ! "`type tree`" = "tree is /usr/local/bin/tree" ]; then
     brew install tree
   fi
-
-  # @todo nvim dependencies
+  
+  if [ ! "`type nvim`" = "tree is /usr/local/bin/nvim" ]; then
+    brew install neovim
+  fi
 else
   echo "Some commands may not work as dependencies haven't been installed.";
 fi
 
+# Choose to install the nvim dependencies when needed.
+if hash nvim 2> /dev/null; then
+  NVIM_PATH="$BP_BASH_SOURCE/.config/nvim/init.vim"
+  command mkdir "$BP_BASH_SOURCE/.config/nvim/" 2> /dev/null && \
+  ln -sf "$BP_CODE_SOURCE/.vimrc" "$NVIM_PATH" && \
+  pip3 install --user pynvim && \
+  curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+else
+  ln -sf "$BP_CODE_SOURCE/.vimrc" "$BP_BASH_SOURCE/.vimrc"
+fi
 
 
 # clean up
