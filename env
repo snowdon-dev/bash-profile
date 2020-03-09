@@ -33,3 +33,9 @@ textEditor="vim"
 #   of the users active repos.
 #
 developBranchName="develop/ds";
+
+
+#   ————————————————
+#   Set the shell cursor to use vim mode. 
+#
+set -o vi
