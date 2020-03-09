@@ -50,7 +50,14 @@ if hash brew 2> /dev/null; then
 
   # @todo nvim dependencies
 else
-  echo "Some commands may not work as dependencies haven't been installed.";
+  # we must be linux use apt-get 
+  if [ ! "`type tree`" = "tree is /usr/bin/tree" ]; then
+    sudo apt-get install tree -y
+  fi
+
+  if [ ! "`type rename`" = "/usr/bin/rename" ]; then
+    sudo apt-get install rename -y
+  fi
 fi
 
 
