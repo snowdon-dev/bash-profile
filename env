@@ -39,3 +39,8 @@ developBranchName="develop/ds";
 #   Set the shell cursor to use vim mode. 
 #
 set -o vi
+HISTSIZE=10000
+SAVEHIST=10000
+HISTFILE=~/.zsh_history
+bindkey -v
+bindkey '^R' history-incremental-search-backward
