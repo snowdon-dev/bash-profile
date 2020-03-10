@@ -48,6 +48,10 @@ if hash brew 2> /dev/null; then
     brew install tree
   fi
 
+  if [ ! "`type htop`" = "htop is /usr/local/bin/htop" ]; then
+    brew install tree
+  fi
+
   # @todo nvim dependencies
 else
   echo "Some commands may not work as dependencies haven't been installed.";
