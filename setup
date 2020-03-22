@@ -49,7 +49,15 @@ if hash brew 2> /dev/null; then
   fi
 
   if [ ! "`type htop`" = "htop is /usr/local/bin/htop" ]; then
-    brew install tree
+    brew install htop 
+  fi
+
+  if [ ! "`type go`" = "go is /usr/local/bin/go" ]; then
+    brew install go
+  fi
+
+  if [ ! "`type php`" = "php is /usr/local/bin/php" ]; then
+    brew install php@7.4
   fi
 
   # @todo nvim dependencies
@@ -59,7 +67,7 @@ else
     sudo apt-get install tree -y
   fi
 
-  if [ ! "`type rename`" = "/usr/bin/rename" ]; then
+  if [ ! "`type rename`" = "rename is /usr/bin/rename" ]; then
     sudo apt-get install rename -y
   fi
 fi

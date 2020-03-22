@@ -163,6 +163,8 @@ Plug 'posva/vim-vue'
 " python
 Plug 'nvie/vim-flake8'
 
+" go support
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 call plug#end()
 
 " ================ Scheme ========================
