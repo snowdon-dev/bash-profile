@@ -28,3 +28,4 @@ BP_CODE_SOURCE="$BP_BASH_SOURCE/$reposFolder/bash-profile"
 
 # location of the users repository folder
 BP_REPO_SOURCE="$BP_BASH_SOURCE/$reposFolder"
+export BP_REPO_SOURCE
