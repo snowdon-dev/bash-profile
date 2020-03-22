@@ -14,6 +14,7 @@ set spelllang=en_gb             "Set spelling language
 set foldmethod=syntax
 set foldlevel=2
 set ruler
+set clipboard=unnamed
 
 " Increase the history buffer for undo'ing mistakes
 set history=1000
@@ -133,6 +134,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'altercation/vim-colors-solarized'
 Plug 'ajh17/spacegray.vim'
 Plug 'scrooloose/nerdtree'
+Plug 'vim-syntastic/syntastic'
 
 " typescript support
 Plug 'HerringtonDarkholme/yats.vim'
@@ -150,17 +152,25 @@ Plug 'leafgarland/typescript-vim'
 " node support
 Plug 'moll/vim-node'
 
+Plug 'godlygeek/tabular'
+
 " markdown support
 Plug 'plasticboy/vim-markdown'
 
 " vue js support
 Plug 'posva/vim-vue'
 
+" python
+Plug 'nvie/vim-flake8'
+
 call plug#end()
 
 " ================ Scheme ========================
 
 syntax on
-colorscheme molokai
+colorscheme spacegray 
 
+" Python
+let python_highlight_all=1
+syntax on
 
