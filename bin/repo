@@ -1,0 +1,99 @@
+#!/bin/bash
+
+CWD=`pwd`
+
+
+usage()
+{
+  echo ""
+  printf "%-4s %-5s %s\n" "1." "list" "list repositories"
+  printf "%-4s %-5s %s\n" "2." "search" "search for a repository"
+  #echo -e "\t-a Description of what is parameterA"
+  exit 1 # Exit script after printing help
+}
+
+[[ $# -eq 0 ]] && usage
+
+#
+# Find program
+#
+search_pre()
+{
+  printf ""
+}
+
+search()
+{
+  local dir=$1
+  shift
+  local search=$1
+  shift
+
+  local name=`basename $dir`
+
+  if [ $search == $name ]; then
+    echo $dir
+  fi
+}
+
+#
+# List program
+#
+list_pre()
+{
+  printf "\e[1m"
+  printf "%-25s %s\n" directory name
+  printf "\e[0m"
+}
+list()
+{
+  local dir=$1
+  shift
+  
+  local name=`echo "${dir//$BP_REPO_SOURCE\//}"`
+  local name_parts=$(echo $name | tr "/" ";")
+  IFS=';' read -ra name_array <<< "$name_parts"
+  printf "%-25s  %s\n" "${name_array[0]}" "${name_array[1]}"
+}
+
+
+
+run_loop() 
+{
+  shift
+  ${program}_pre
+  # loop over the first level of the directory
+  for f in $BP_REPO_SOURCE/*; do
+    command cd $f
+    if [ -d .git ] || git rev-parse --git-dir > /dev/null 2>&1; then
+      $program $f $@
+      continue
+    fi
+
+    # if the directory is not git
+    # try each of its children
+    for f2 in $f/*; do
+      command cd $f2
+      if [ -d .git ] || git rev-parse --git-dir > /dev/null 2>&1; then
+        $program $f2 $@
+        continue
+      fi
+    done
+  done
+
+  command cd $cwd
+}
+
+
+program=
+
+case $1 in 
+  list ) program="list"
+    run_loop $@
+    exit;
+    ;;
+  search ) program="search"
+    run_loop $@
+    exit;
+    ;;
+esac
