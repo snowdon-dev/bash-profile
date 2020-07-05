@@ -136,6 +136,10 @@ Plug 'ajh17/spacegray.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'vim-syntastic/syntastic'
 
+" server config stuff
+Plug 'chr4/nginx.vim'
+Plug 'skanehira/docker-compose.vim'
+
 " typescript support
 Plug 'HerringtonDarkholme/yats.vim'
 if has('nvim')
