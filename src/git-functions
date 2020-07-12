@@ -60,26 +60,6 @@ rebase()
 
 
 #   ————————————————
-#   Diff with the current branches base.
-#
-diff()
-{
-  local CBRANCH=`gbc`
-  local BASE=`git merge-base $CBRANCH master`
-  git diff $BASE $CBRANCH $@
-}
-
-#   ————————————————
-#   Diff with the current branches origin.
-#
-diffo()
-{
-  local CBRANCH=`gbc`
-  local BASE=`git merge-base origin/$CBRANCH $CBRANCH`
-  git diff $BASE $CBRANCH $@
-}
-
-#   ————————————————
 #   Get the current branch.
 #
 alias gbc="git branch | grep \* | cut -d ' ' -f2"
