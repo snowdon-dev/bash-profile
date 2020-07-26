@@ -40,6 +40,8 @@ filetype indent on
 set wrap       "Wrap lines
 set linebreak    "Wrap lines at convenient points
 
+autocmd FileType php setlocal shiftwidth=4 softtabstop=4 expandtab
+
 " ================ Scrolling ========================
 
 set scrolloff=8         "Start scrolling when we're 8 lines away from margins
