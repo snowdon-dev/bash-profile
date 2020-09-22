@@ -2,7 +2,6 @@
 HASH=`docker ps -q`;
 if [[ -z "$HASH" ]]; then
   echo "No active containers."
-  return 0;
 fi;
 
 echo "$HASH" | xargs -n 1 docker stop
