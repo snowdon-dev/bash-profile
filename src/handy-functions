@@ -40,7 +40,7 @@ alias cp='cp -iv'
 alias mv='mv -iv'
 alias mkdir='mkdir -pv'
 alias less='less -FS'
-
+touch2() { mkdir -p "$(dirname "$1")" && touch "$1" ; }
 
 # edit package.json in current directory
 alias package="vim ./package.json"
