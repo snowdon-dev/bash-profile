@@ -1,5 +1,38 @@
-#!/bin/bash
+#!/bin/bash - 
+#===============================================================================
+#
+#          FILE: dk:pi-run
+# 
+#         USAGE: ./dk:pi-run
+# 
+#   DESCRIPTION: Run commands on local network pi cluster.
+# 
+#  REQUIREMENTS: Takes a script as standard input and execute it on all 
+#                 reachable raspberry pi(s).
+#          BUGS: ---
+#         NOTES: ---
+#        AUTHOR: snowdon-dev (dale@snowdon.dev)
+#       CREATED: 13/12/2020 18:53
+#      REVISION: 2
+#===============================================================================
+set -o nounset
+trap "exit" INT
 
-for i in {0..4}; do
-  ssh pi@pi$i.local $@
-done;
+script=$(</dev/stdin)
+
+output_buffer=""
+for i in {0..3}; do
+  echo "✨ pi$i->"
+
+  echo "$script" | ssh -o ConnectTimeout=3 -p 6622 dale@pi$i.local "bash -s"
+
+  if [ $? == 255 ]
+  then
+    output_buffer="$output_buffer\nConnection Failed: pi$i"
+  fi
+done
+if [ ! -z "$output_buffer" ]
+then
+  printf "$output_buffer\n"
+fi
+

@@ -142,14 +142,16 @@ Plug 'vim-syntastic/syntastic'
 Plug 'chr4/nginx.vim'
 Plug 'skanehira/docker-compose.vim'
 
+Plug 'vim-scripts/bash-support.vim'
+
 " typescript support
 Plug 'HerringtonDarkholme/yats.vim'
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-endif
-Plug 'Shougo/denite.nvim'
-Plug 'leafgarland/typescript-vim'
+"if has('nvim')
+"  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+"else
+"endif
+"Plug 'Shougo/denite.nvim'
+"Plug 'leafgarland/typescript-vim'
 
 
 " javascript support

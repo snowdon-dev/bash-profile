@@ -1,5 +1,5 @@
 #!/bin/bash
 
 for ip in {0..4}; do
-	printf "%s %s %s\n" "pi$ip.local" "pi$ip.local" "`dk:pi-up $ip`"
+	printf "%s %s %s\n" "dale$ip.local" "dale$ip.local" "`dk:pi-up $ip`"
 done;
