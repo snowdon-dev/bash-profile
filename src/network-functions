@@ -14,7 +14,7 @@ pi()
 {
   num="$1"
   shift
-  ssh pi@"pi$num.local" $@
+  ssh -p 6622 dale@"pi$num.local" $@
 }
 
 #   ————————————————

@@ -10,6 +10,7 @@
 #  REQUIREMENTS: Takes a script as standard input and execute it on all 
 #                 reachable raspberry pi(s).
 #          BUGS: ---
+#       OPTIONS: -t Force pseudo-terminal allocation
 #         NOTES: ---
 #        AUTHOR: snowdon-dev (dale@snowdon.dev)
 #       CREATED: 13/12/2020 18:53
@@ -20,11 +21,17 @@ trap "exit" INT
 
 script=$(</dev/stdin)
 
+useTty=""
+if [[ $* == *-t* ]]
+then
+  useTty="-t"
+fi;
+
 output_buffer=""
 for i in {0..3}; do
   echo "✨ pi$i->"
 
-  echo "$script" | ssh -o ConnectTimeout=3 -p 6622 dale@pi$i.local "bash -s"
+  echo "$script" | ssh $useTty -o ConnectTimeout=3 -p 6622 dale@pi$i.local "bash -s"
 
   if [ $? == 255 ]
   then
