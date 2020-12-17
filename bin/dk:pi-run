@@ -11,24 +11,46 @@
 #                 reachable raspberry pi(s).
 #          BUGS: ---
 #       OPTIONS: -t Force pseudo-terminal allocation
+#                -n Exclude the given server(s) by comma separated integer 
 #         NOTES: ---
 #        AUTHOR: snowdon-dev (dale@snowdon.dev)
 #       CREATED: 13/12/2020 18:53
 #      REVISION: 2
 #===============================================================================
-set -o nounset
 trap "exit" INT
 
 script=$(</dev/stdin)
-
 useTty=""
-if [[ $* == *-t* ]]
-then
-  useTty="-t"
-fi;
+excludeFromExecute=()
+
+args=$(getopt tn: $*)
+set -- $args
+for i
+do
+  case "$i"
+  in
+    -t)
+      useTty="-t"
+      shift;;
+    -n)
+      excludeFromExecute+=$(echo $2 | tr "," "\n")
+      shift;;
+    --)
+      shift
+      break;;
+  esac
+done
 
 output_buffer=""
 for i in {0..3}; do
+  # continue if server should be excluded 
+  for n in $excludeFromExecute
+  do
+    if [ "$n" = "$i" ]
+    then
+      continue 2
+    fi
+  done
   echo "✨ pi$i->"
 
   echo "$script" | ssh $useTty -o ConnectTimeout=3 -p 6622 dale@pi$i.local "bash -s"
