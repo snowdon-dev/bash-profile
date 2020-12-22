@@ -173,12 +173,19 @@ Plug 'nvie/vim-flake8'
 
 " go support
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+
+" latex
+Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
+
 call plug#end()
 
 " ================ Scheme ========================
 
 syntax on
 colorscheme spacegray 
+
+" latex
+let g:livepreview_previewer = 'open -a Preview'
 
 " Python
 let python_highlight_all=1
