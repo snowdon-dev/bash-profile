@@ -3,6 +3,10 @@
 #   @author       dale@snowdon.dev
 #   ————————————————————————————————————————————————————
 
+#   ————————————————
+#   Use the theme for the oh-my-plugin.
+#
+ZSH_THEME="crcandy"
 
 #   ————————————————
 #   Add coloring to the ouput of the tree command.

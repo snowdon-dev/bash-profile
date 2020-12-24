@@ -191,3 +191,8 @@ let g:livepreview_previewer = 'open -a Preview'
 let python_highlight_all=1
 syntax on
 
+
+
+" ================ C shortcuts ========================
+map <F8> :w <CR> :!gcc % -o %< && ./%< <CR>
+

@@ -7,8 +7,6 @@
 
 . -- ~/Repositories/bash-profile/variables
 
-. -- "$BP_CODE_SOURCE/env"
-
 ## for each file load the source
 for f in $BP_CODE_SOURCE/src/*; do
 	if [[ "$f" = * ]]; then
